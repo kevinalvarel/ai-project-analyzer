@@ -102,7 +102,7 @@ const Upload = () => {
       <Navbar />
       <section className="main-section">
         <div className="page-heading py-16">
-          <h1>Smart Feedback for your job</h1>
+          <h1>Ketahui hasil yang kamu inginkan</h1>
           {isProcessing ? (
             <>
               <h2>{statusText}</h2>
@@ -113,7 +113,7 @@ const Upload = () => {
               />
             </>
           ) : (
-            <h2>Drop your resume here</h2>
+            <h2>Unggah CV kamu disini</h2>
           )}
           {!isProcessing && (
             <form
