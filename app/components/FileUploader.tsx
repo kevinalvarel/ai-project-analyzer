@@ -54,6 +54,7 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
                   onFileSelect?.(null);
                 }}
               >
+                {/* Delete Icon */}
                 <img src="/icons/cross.svg" alt="remove" className="w-4 h-4" />
               </button>
             </div>
