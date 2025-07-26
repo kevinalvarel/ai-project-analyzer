@@ -98,7 +98,7 @@ const Upload = () => {
 
   // Tampilan
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-gradient-to-b from-[#f0f4ff] to-[#dbeafe]">
       <Navbar />
       <section className="main-section">
         <div className="page-heading py-16">
@@ -122,11 +122,11 @@ const Upload = () => {
               className="flex flex-col gap-4"
             >
               <div className="form-div">
-                <label htmlFor="company-name">Nama Perusahaan / Instansi</label>
+                <label htmlFor="company-name">Nama Perusahaan </label>
                 <input
                   type="text"
                   name="company-name"
-                  placeholder="Nama Perusahaan / Instansi"
+                  placeholder="Nama Perusahaan"
                   id="company-name"
                 />
               </div>

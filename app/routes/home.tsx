@@ -1,43 +1,88 @@
 import type { Route } from "./+types/home";
-import { usePuterStore } from "~/lib/puter";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
-
-import { resumes } from "../../constants/index";
-import ResumeCard from "~/components/ResumeCard";
 import Navbar from "~/components/Navbar";
+import ResumeCard from "~/components/ResumeCard";
+import { usePuterStore } from "~/lib/puter";
+import { Link, useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "ResumeAI" },
-    { name: "description", content: "Check your resume with AI !" },
+    { title: "Resume AI" },
+    {
+      name: "description",
+      content: "Dapatkan hasil yang terbaik untuk pekerjaan mu !",
+    },
   ];
 }
 
 export default function Home() {
-  const { auth } = usePuterStore();
+  const { auth, kv } = usePuterStore();
   const navigate = useNavigate();
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [loadingResumes, setLoadingResumes] = useState(false);
 
   useEffect(() => {
     if (!auth.isAuthenticated) navigate("/auth?next=/");
   }, [auth.isAuthenticated]);
 
+  useEffect(() => {
+    const loadResumes = async () => {
+      setLoadingResumes(true);
+
+      const resumes = (await kv.list("resume:*", true)) as KVItem[];
+
+      const parsedResumes = resumes?.map(
+        (resume) => JSON.parse(resume.value) as Resume
+      );
+
+      setResumes(parsedResumes || []);
+      setLoadingResumes(false);
+    };
+
+    loadResumes();
+  }, []);
+
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <main className="bg-gradient-to-b from-[#f0f4ff] to-[#dbeafe]">
       <Navbar />
+
       <section className="main-section">
         <div className="page-heading py-16">
-          <h1>Lihat Perkembanganmu di Sini!</h1>
-          <h2>
-            Tinjau CV yang sudah dikirim dan dapatkan saran pintar dari AI untuk
-            jadi lebih baik.
-          </h2>
+          <h1>Cek dan Tingkatkan CV-mu dengan AI</h1>
+          {!loadingResumes && resumes?.length === 0 ? (
+            <h2>
+              Kamu belum mengunggah CV. Yuk, unggah sekarang untuk lihat review
+              dari AI!
+            </h2>
+          ) : (
+            <h2>
+              Lihat hasil analisis dan masukan dari AI untuk bantu kamu tampil
+              lebih standout!
+            </h2>
+          )}
         </div>
-        {resumes.length > 0 && (
+        {loadingResumes && (
+          <div className="flex flex-col items-center justify-center">
+            <img src="/images/resume-scan-2.gif" className="w-[200px]" />
+          </div>
+        )}
+
+        {!loadingResumes && resumes.length > 0 && (
           <div className="resumes-section">
             {resumes.map((resume) => (
               <ResumeCard key={resume.id} resume={resume} />
             ))}
+          </div>
+        )}
+
+        {!loadingResumes && resumes?.length === 0 && (
+          <div className="flex flex-col items-center justify-center mt-10 gap-4">
+            <Link
+              to="/upload"
+              className="primary-button w-fit text-xl font-semibold"
+            >
+              Upload Resume
+            </Link>
           </div>
         )}
       </section>
