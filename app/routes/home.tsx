@@ -56,8 +56,8 @@ export default function Home() {
             </h2>
           ) : (
             <h2>
-              Lihat hasil analisis dan masukan dari AI untuk bantu kamu tampil
-              lebih standout!
+              Lihat hasil analisis dan masukan dari AI untuk membantu
+              mendapatkan pekerjaan impian mu!
             </h2>
           )}
         </div>
